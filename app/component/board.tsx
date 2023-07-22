@@ -31,6 +31,12 @@ export default function Board() {
           title: '[FE] [DESKTOP] Create UI',
           description: 'Membuat UI yang indah pada halaman tertentu adalah tugas frontend developer',
           tag: '0e617050-2a54-46f7-a8f7-7f2f6dbb6fba'
+        },
+        {
+          id: v4(),
+          title: '[QA] [DESKTOP] Test Apps',
+          description: 'Membuat UI yang indah pada halaman tertentu adalah tugas frontend developer',
+          tag: '0e617060-2a54-46f7-x8f7-7e2f6dbb6fba'
         }
       ]
     },
@@ -245,8 +251,16 @@ export default function Board() {
           <p className='text-xs text-gray-900 font'>{dataTime?.timezone} {fullTime}</p>
         </div>
         <div>
-          <Button title='Create New Column' onClick={handleNewColumn} />
-          <Button title='Create New Todo' onClick={handleNewTodo} />
+          <Button
+            title='Create New Column'
+            onClick={handleNewColumn}
+          />
+          <Button
+            title='Create New Todo'
+            onClick={handleNewTodo}
+            background='bg-green-500'
+            backgroundActive='bg-green-600'
+          />
         </div>
       </div>
       <div className='overflow-x-scroll max-w-full'>
