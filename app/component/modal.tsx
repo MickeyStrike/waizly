@@ -10,6 +10,10 @@ interface IModalComponent {
   selectedCard?: DataTodo,
   listTags: Tag[],
   handleDeleteTodo: (id?: string) => void
+  indexParentActual: number
+  todoList: TodoList[],
+  handlePrev: () => void,
+  handleNext: () => void
 }
 
 const ModalComponent:FC<IModalComponent> = ({
@@ -19,7 +23,11 @@ const ModalComponent:FC<IModalComponent> = ({
   handleSubmitForm,
   selectedCard,
   listTags,
-  handleDeleteTodo
+  handleDeleteTodo,
+  indexParentActual,
+  todoList,
+  handlePrev,
+  handleNext
 }) => {
 
   const [selectedTag, setSelectedTag] = useState('')
@@ -159,13 +167,17 @@ const ModalComponent:FC<IModalComponent> = ({
                         </div>
                       </div>
                       <div className='flex items-center justify-end px-6 pt-6 mt-12 border-t border-solid border-slate-200 rounded-b'>
-                        <button
-                          className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                          type="button"
-                          onClick={() => setVisible(false)}
-                        >
-                          Close
-                        </button>
+                        {
+                          indexParentActual !== 0 && 
+                            <button
+                              onClick={handlePrev}
+                              className='text-white bg-yellow-500 rounded-md font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+                            >
+                              {
+                                "< " + todoList[indexParentActual - 1].title
+                              }
+                            </button>
+                        }
                         <button
                           className="text-white bg-red-500 rounded-md font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                           type="button"
@@ -174,6 +186,17 @@ const ModalComponent:FC<IModalComponent> = ({
                           Delete TODO
                         </button>
                         <input type="submit" className="text-white rounded-md bg-blue-500 font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 cursor-pointer" />
+                        {
+                          indexParentActual !== todoList.length - 1 && 
+                            <button
+                              onClick={handleNext}
+                              className='text-white bg-yellow-500 rounded-md font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+                            >
+                              {
+                                todoList[indexParentActual + 1].title + ' >'
+                              }
+                            </button>
+                        }
                       </div>
                     </form>
                   }

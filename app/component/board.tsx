@@ -14,6 +14,7 @@ export default function Board() {
   const [visible, setVisible] = useState(false)
   const [titleModal, setTitleModal] = useState<TitleModal>('Create New Todo')
   const [selectedCard, setSelectedCard] = useState<DataTodo>()
+  const [indexParentActual, setIndexParentActual] = useState<number>(0)
 
   const [todoList, setTodoList] = useState<TodoList[]>([
     {
@@ -101,6 +102,8 @@ export default function Board() {
   const handleClickCard = (data: DataTodo) => {
     setTitleModal('Edit Todo')
     setSelectedCard(data)
+    const idx = todoList.findIndex(x => x.data.some(y => y.id === data.id))
+    setIndexParentActual(idx)
     setVisible(true)
   }
 
@@ -150,6 +153,24 @@ export default function Board() {
     }
   }
 
+  const handleNext = () => {
+    if(indexParentActual !== todoList.length -1) {
+      const newTodoList = todoList.slice();
+      newTodoList[indexParentActual + 1].data.push(selectedCard as DataTodo);
+      newTodoList[indexParentActual].data = newTodoList[indexParentActual].data.filter(x => x.id !== selectedCard?.id);
+      setTodoList(newTodoList);
+    }
+  }
+
+  const handlePrev = () => {
+    if(indexParentActual !== 0) {
+      const newTodoList = todoList.slice();
+      newTodoList[indexParentActual - 1].data.push(selectedCard as DataTodo);
+      newTodoList[indexParentActual].data = newTodoList[indexParentActual].data.filter(x => x.id !== selectedCard?.id);
+      setTodoList(newTodoList);
+    }
+  }
+
   return (
     <>
       <ModalComponent
@@ -160,6 +181,10 @@ export default function Board() {
         selectedCard={selectedCard}
         listTags={listTags}
         handleDeleteTodo={handleDeleteTodo}
+        indexParentActual={indexParentActual}
+        todoList={todoList}
+        handleNext={handleNext}
+        handlePrev={handlePrev}
       />
       <div className='w-full flex flex-row justify-between'>
         <div className='mb-4'>
