@@ -1,6 +1,7 @@
 import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form';
 import { TitleModal } from './board';
+import { DataTodo, Tag, TodoList } from '../interface';
 
 interface IModalComponent {
   visible: boolean,

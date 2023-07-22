@@ -7,6 +7,8 @@ import Button from './button'
 import { FieldValues } from 'react-hook-form'
 import { v4 } from "uuid";
 import { DataTime, DataTodo, Tag, TodoList } from '../interface'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export type TitleModal = 'Create New Todo' | 'Create New Column' | 'Edit Todo'
 
@@ -120,13 +122,28 @@ export default function Board() {
     })
     setTodoList(newTodo)
     setSelectedCard(undefined)
+    notifSuccess('Success delete todo!')
     setVisible(false)
+  }
+
+  const notifSuccess = (message: string) => {
+    toast.success(message, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
   }
 
   const handleSubmitForm = (data: FieldValues, id?: string) => {
     switch (titleModal) {
       case 'Create New Column':
         setTodoList((prev) => [...prev, { id: v4(), data: [], title: data.title }])
+        notifSuccess('Success create new column!')
         setVisible(false)
       break;
       case 'Create New Todo':
@@ -137,6 +154,7 @@ export default function Board() {
           return dataMap
         })
         setTodoList(tempTodoList)
+        notifSuccess('Success create new todo!')
         setVisible(false)
       break;
       case 'Edit Todo':
@@ -151,8 +169,11 @@ export default function Board() {
           return { ...x, data: tempData }
         })
         setTodoList(newTodo)
+        notifSuccess('Success edit todo!')
         setVisible(false)
       break;
+      default:
+        break;
     }
   }
 
@@ -212,11 +233,12 @@ export default function Board() {
         handleNext={handleNext}
         handlePrev={handlePrev}
       />
+      <ToastContainer />
       <div className='w-full flex flex-row justify-between'>
         <div className='mb-4'>
           <h1 className='font-bold text-lg'>TODO LIST</h1>
-          <h1 className='text-sm'>What You Want TODO is here!</h1>
-          <p>{dataTime?.timezone} {fullTime}</p>
+          <h1 className='text-md font-semibold'>What You Want TODO is here!</h1>
+          <p className='text-xs text-gray-900 font'>{dataTime?.timezone} {fullTime}</p>
         </div>
         <div>
           <Button title='Create New Column' onClick={handleNewColumn} />
@@ -228,7 +250,7 @@ export default function Board() {
           {
             todoList.map((dataMap, idx) => (
               <div key={idx} className='flex-shrink-0 w-[300px] bg-gray-200 min-h-full p-5 rounded-md'>
-                <p className='text-gray-600 font-semibold'>{ dataMap.title }</p>
+                <p className='text-gray-600 font-semibold uppercase'>{ dataMap.title }</p>
                 {
                   dataMap.data.map((todo, idx) => (
                     <Card
