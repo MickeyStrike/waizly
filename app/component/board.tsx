@@ -183,6 +183,8 @@ export default function Board() {
       newTodoList[indexParentActual + 1].data.push(selectedCard as DataTodo);
       newTodoList[indexParentActual].data = newTodoList[indexParentActual].data.filter(x => x.id !== selectedCard?.id);
       setTodoList(newTodoList);
+      notifSuccess('Success move todo!');
+      setVisible(false);
     }
   }
 
@@ -192,12 +194,14 @@ export default function Board() {
       newTodoList[indexParentActual - 1].data.push(selectedCard as DataTodo);
       newTodoList[indexParentActual].data = newTodoList[indexParentActual].data.filter(x => x.id !== selectedCard?.id);
       setTodoList(newTodoList);
+      notifSuccess('Success move todo!');
+      setVisible(false);
     }
   }
 
   const getTime = async () => {
     try {
-      const response = await fetch('http://worldtimeapi.org/api/timezone/Asia/Jakarta', { method: 'GET' })
+      const response = await fetch('https://worldtimeapi.org/api/timezone/Asia/Jakarta', { method: 'GET' })
       const data:DataTime = await response.json()
       setDataTime(data)
       const currentdate = new Date(data.datetime)

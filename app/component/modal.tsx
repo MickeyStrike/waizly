@@ -171,6 +171,7 @@ const ModalComponent:FC<IModalComponent> = ({
                         {
                           indexParentActual !== 0 && 
                             <button
+                              type='button'
                               onClick={handlePrev}
                               className='text-white bg-yellow-500 rounded-md font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
                             >
@@ -190,6 +191,7 @@ const ModalComponent:FC<IModalComponent> = ({
                         {
                           indexParentActual !== todoList.length - 1 && 
                             <button
+                              type='button'
                               onClick={handleNext}
                               className='text-white bg-yellow-500 rounded-md font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
                             >
