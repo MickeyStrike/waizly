@@ -1,11 +1,12 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Card from './card'
 import ModalComponent from './modal'
 import Button from './button'
 import { FieldValues } from 'react-hook-form'
 import { v4 } from "uuid";
+import { DataTime, DataTodo, Tag, TodoList } from '../interface'
 
 export type TitleModal = 'Create New Todo' | 'Create New Column' | 'Edit Todo'
 
@@ -15,6 +16,8 @@ export default function Board() {
   const [titleModal, setTitleModal] = useState<TitleModal>('Create New Todo')
   const [selectedCard, setSelectedCard] = useState<DataTodo>()
   const [indexParentActual, setIndexParentActual] = useState<number>(0)
+  const [dataTime, setDataTime] = useState<DataTime | undefined>()
+  const [fullTime, setFullTime] = useState<string>('')
 
   const [todoList, setTodoList] = useState<TodoList[]>([
     {
@@ -171,6 +174,29 @@ export default function Board() {
     }
   }
 
+  const getTime = async () => {
+    try {
+      const response = await fetch('http://worldtimeapi.org/api/timezone/Asia/Jakarta', { method: 'GET' })
+      const data:DataTime = await response.json()
+      setDataTime(data)
+      const currentdate = new Date(data.datetime)
+      const datetime = currentdate.getDate() + "/"
+                + (currentdate.getMonth()+1)  + "/" 
+                + currentdate.getFullYear() + "  "  
+                + currentdate.getHours() + ":"  
+                + currentdate.getMinutes() + ":" 
+                + currentdate.getSeconds();
+      setFullTime(datetime)
+    } catch (err) {
+      console.log(err, 'ini err')
+    }
+  }
+
+  useEffect(() => {
+    const intervalId = setInterval(getTime, 5000)
+    return () => clearInterval(intervalId)
+  }, [])
+
   return (
     <>
       <ModalComponent
@@ -190,8 +216,9 @@ export default function Board() {
         <div className='mb-4'>
           <h1 className='font-bold text-lg'>TODO LIST</h1>
           <h1 className='text-sm'>What You Want TODO is here!</h1>
+          <p>{dataTime?.timezone} {fullTime}</p>
         </div>
-        <div className='gap-4'>
+        <div>
           <Button title='Create New Column' onClick={handleNewColumn} />
           <Button title='Create New Todo' onClick={handleNewTodo} />
         </div>
